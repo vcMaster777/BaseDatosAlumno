@@ -70,62 +70,128 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             case R.id.button:
                 String id_input=t_id.getText().toString();
-                    if(id_input.equals(""))
+                if(id_input.equals(""))
+                {
+                    Context c =getApplicationContext();
+                    String m ="El id está vacio";
+                    Toast.makeText(c,m,Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    registros = base.rawQuery("SELECT * FROM alumnos", null);
+                    boolean sw=true;
+                    Cursor registroVerificacion=base.rawQuery("SELECT * FROM alumnos WHERE id=" + id_input,null);
+                    if (registroVerificacion.moveToFirst())
                     {
-                        Context c =getApplicationContext();
-                        String m ="El id está vacio";
-                        Toast.makeText(c,m,Toast.LENGTH_LONG).show();
-                    }
-                        else {
-                        registros = base.rawQuery("SELECT * FROM alumnos", null);
-                             }
-                            if(registros.moveToPosition(Integer.parseInt(id_input)))
-                                {
-                                t_nombre.setText(registros.getString(1));
-                                t_dni.setText(registros.getString(2));
-                                t_telefono.setText(registros.getString(3));
-                                }
-                            else
+                        while (sw)
+                        {
+                            if (registros.moveToNext())
                             {
-                                Context c=getApplicationContext();
-                                String m ="El id no EXiste";
-                                Toast.makeText(c,m,Toast.LENGTH_LONG).show();
-                                LimpiarTextos();
-
+                                    if(registros.getString(0).equals(id_input))
+                                    {
+                                        sw=false;
+                                    }
                             }
+                        }
+                        t_nombre.setText(registros.getString(1));
+                        t_dni.setText(registros.getString(2));
+                        t_telefono.setText(registros.getString(3));
+                    }
+                        else
+                        {
+                            Context c=getApplicationContext();
+                             String m="El id no existe";
+                            Toast.makeText(c,m,Toast.LENGTH_LONG).show();
+                             LimpiarTextos();
+
+                         }
 
 
+
+                }
                 break;
             case R.id.button2:
-                            String nombre_input=t_nombre.getText().toString();
-                            String dni_input=t_dni.getText().toString();
-                            String telefono_input=t_telefono.getText().toString();
-                            if(nombre_input.equals("") || dni_input.equals("") || telefono_input.equals("") )
-                            {
-                                Context c = getApplicationContext();
-                                String m= "no puedes ingreart datos en blanco";
-                                Toast.makeText(c,m,Toast.LENGTH_LONG).show();
-                            }
-                            else
-                            {
-                                ContentValues nuevoRegistro=new ContentValues();
-                                nuevoRegistro.put("nombre",nombre_input);
-                                nuevoRegistro.put("dni",dni_input);
-                                nuevoRegistro.put("telefono",telefono_input);
-                                base.insert("alumnos",null,nuevoRegistro);
-                                registros=base.rawQuery("SELECT * FROM alumnos",null);
-                                Context c =getApplicationContext();
-                                String m= "Los datos se ingresaron correctamente.";
-                                Toast.makeText(c,m,Toast.LENGTH_LONG).show();
-                                LimpiarTextos();
-
-                                }
-
-
+                String nombre_input=t_nombre.getText().toString();
+                String dni_input=t_dni.getText().toString();
+                String telefono_input=t_telefono.getText().toString();
+                if(nombre_input.equals("") || dni_input.equals("") || telefono_input.equals("") )
+                {
+                    Context c = getApplicationContext();
+                    String m= "no puedes ingresar datos en blanco";
+                    Toast.makeText(c,m,Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    ContentValues nuevoRegistro = new ContentValues();
+                    nuevoRegistro.put("nombre",nombre_input);
+                    nuevoRegistro.put("dni",dni_input);
+                    nuevoRegistro.put("telefono",telefono_input);
+                    base.insert("alumnos",null,nuevoRegistro);
+                    registros=base.rawQuery("SELECT * FROM alumnos",null);
+                    Context c =getApplicationContext();
+                    String m= "Los datos se ingresaron correctamente.";
+                    Toast.makeText(c,m,Toast.LENGTH_LONG).show();
+                    LimpiarTextos();
+                }
                 break;
             case R.id.button3:
+                String id_input2 = t_id.getText().toString();
+                String nombre_input2=t_nombre.getText().toString();
+                String dni_input2=t_dni.getText().toString();
+                String telefono_input2=t_telefono.toString();
+                if (id_input2.equals("")|| nombre_input2.equals("") || dni_input2.equals("") || telefono_input2.equals(""))
+                {
+                    Context c= getApplicationContext();
+                    String m= "Los campos no pueden estar en blanco";
+                    Toast.makeText(c,m, Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    Cursor registroVerificacion =base.rawQuery("SELECT * FROM alumnos WHERE id="+ id_input2,null);
+                    if(registroVerificacion.moveToFirst())
+                    {
+                        ContentValues nuevoRegistro = new ContentValues();
+                        nuevoRegistro.put("nombre",nombre_input2);
+                        nuevoRegistro.put("dni",dni_input2);
+                        nuevoRegistro.put("telefono",telefono_input2);
+                        base.update("alumnos", nuevoRegistro, "id=" + id_input2,null);
+                        Context c = getApplicationContext();
+                        String m="Se actualizó el registro correctamente.";
+
+                        Toast.makeText(c,m,Toast.LENGTH_LONG).show();
+                        LimpiarTextos();
+                    }
+                    else
+                    {
+                        Context c= getApplicationContext();
+                        String m =" El id que intenta modificar no existe.";
+                        Toast.makeText(c,m,Toast.LENGTH_LONG).show();
+                    }
+                }
                 break;
             case R.id.button4:
+                String id_input3 = t_id.getText().toString();
+                if (id_input3.equals(""))
+                    {
+                        Context c= getApplicationContext();
+                        String m=" El id que intenta eliminar está en blanco";
+                        Toast.makeText(c,m,Toast.LENGTH_LONG).show();
+                    }
+                    else
+                    {
+                     Cursor registroVerificacion=base.rawQuery("SELECT * FROM alumnos WHERE id="+ id_input3, null);
+                        if(registroVerificacion.moveToFirst())
+                        {
+                            base.delete("alumnos", "id=" + id_input3,null);
+                            registros=base.rawQuery("SELECT * FROM alumnos",null);
+                            Context c=getApplicationContext();
+                            String m="El registro se eliminó correctamente.";
+                            Toast.makeText(c,m,Toast.LENGTH_LONG).show();
+                            LimpiarTextos();
+                        }
+
+                     }
+
                 break;
             case R.id.button5:
                 break;
