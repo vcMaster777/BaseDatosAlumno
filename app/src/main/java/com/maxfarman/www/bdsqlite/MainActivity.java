@@ -194,12 +194,71 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.button5:
+                registros = base.rawQuery("SELECT * FROM alumnos",null);
+                if(registros.moveToFirst())
+                {
+                    t_id.setText(registros.getString(0));
+                    t_nombre.setText(registros.getString(1));
+                    t_dni.setText(registros.getString(2));
+                    t_telefono.setText(registros.getString(3));
+                }
+                else
+                {
+                    Context c = getApplicationContext();
+                    String m = "No hay registros existentes.";
+                    Toast.makeText(c,m,Toast.LENGTH_LONG).show();
+                }
+
+
                 break;
             case R.id.button6:
+                registros = base.rawQuery("SELECT * FROM alumnos",null);
+                if(registros.moveToLast())
+                {
+                    t_id.setText(registros.getString(0));
+                    t_nombre.setText(registros.getString(1));
+                    t_dni.setText(registros.getString(2));
+                    t_telefono.setText(registros.getString(3));
+                }
+                else
+                {
+                    Context c = getApplicationContext();
+                    String m = "No hay registros existentes.";
+                    Toast.makeText(c,m,Toast.LENGTH_LONG).show();
+                }
+
+
                 break;
             case R.id.button7:
+                if(registros.moveToPrevious())
+                {
+                    t_id.setText(registros.getString(0));
+                    t_nombre.setText(registros.getString(1));
+                    t_dni.setText(registros.getString(2));
+                    t_telefono.setText(registros.getString(3));
+                }
+                else
+                {
+                    Context c = getApplicationContext();
+                    String m = "Ya no hay registros anteriores.";
+                    Toast.makeText(c,m,Toast.LENGTH_LONG).show();
+                }
+
                 break;
             case R.id.button8:
+                if(registros.moveToNext())
+                {
+                    t_id.setText(registros.getString(0));
+                    t_nombre.setText(registros.getString(1));
+                    t_dni.setText(registros.getString(2));
+                    t_telefono.setText(registros.getString(3));
+                }
+                else
+                {
+                    Context c = getApplicationContext();
+                    String m = "Ya no hay registros siguientes.";
+                    Toast.makeText(c,m,Toast.LENGTH_LONG).show();
+                }
                 break;
             case R.id.button9:
                 LimpiarTextos();
